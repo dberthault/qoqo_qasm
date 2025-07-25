@@ -497,7 +497,7 @@ pub fn call_operation(
                 ))
             } else {
                 Ok(format!(
-                    "rxy({},{}) {}[{}];",
+                    "r({},{}) {}[{}];",
                     op.theta(),
                     op.phi(),
                     qubit_register_name,
@@ -1380,7 +1380,7 @@ pub fn gate_definition(
             "gate pscp(theta,phi) a,b { rz(theta/2) a; rz(theta/2) b; cx a,b; rz(-theta/2) b; cx a,b; rz(phi) a; rz(phi) b; }"
         )),
         Operation::RotateXY(_) => Ok(String::from(
-            "gate rxy(theta,phi) q { u3(theta,phi-pi/2,pi/2-phi) q; }"
+            "gate r(theta,phi) q { u3(theta,phi-pi/2,pi/2-phi) q; }"
         )),
         Operation::Toffoli(_) => Ok(String::from(
             "gate ccx a,b,c { u2(0,pi) c; cx b,c; u1(-pi/4) c; cx a,c; u1(pi/4) c; cx b,c; u1(-pi/4) c; cx a,c; u1(pi/4) b; u1(pi/4) c; u2(0,pi) c; cx a,b; u1(pi/4) a; u1(-pi/4) b; cx a,b; }"

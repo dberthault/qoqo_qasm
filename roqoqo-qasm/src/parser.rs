@@ -143,7 +143,7 @@ fn gate_dispatch(
             CalculatorFloat::from(&params[1]),
             CalculatorFloat::from(&params[2]),
         ))),
-        "rxy" => Some(Operation::from(RotateXY::new(
+        "r" | "rxy" => Some(Operation::from(RotateXY::new(
             qubits[0],
             CalculatorFloat::from(&params[0]),
             CalculatorFloat::from(&params[1]),
@@ -383,7 +383,7 @@ fn parse_qasm_file(file: &str) -> Result<Circuit, Box<Error<Rule>>> {
                                 let mut gate_qubits: Vec<usize> = vec![];
                                 for gate_token in inner_gate_pairs.clone() {
                                     match gate_token.as_rule() {
-                                        Rule::argument_list_def => {
+                                        Rule::parameter_list => {
                                             gate_params = inner_gate_pairs
                                                 .next()
                                                 .unwrap()

@@ -13,6 +13,7 @@
 //! Testing the roqoqo-qasm Parser
 
 use std::convert::TryInto;
+use std::f64::consts::PI;
 use std::fs::File;
 
 use num_complex::Complex64;
@@ -228,5 +229,26 @@ fn test_symbols() {
     circuit_qoqo += RotateZ::new(0, 1.0.into());
     circuit_qoqo += RotateXY::new(1, 4.0.into(), 1.0.into());
 
+    assert_eq!(circuit_from_file, circuit_qoqo);
+}
+
+#[test]
+fn test_param_definition() {
+    let file = File::open(
+        std::env::current_dir()
+            .unwrap()
+            .join("tests/parameterized_def.qasm"),
+    )
+    .unwrap();
+
+    let circuit_from_file = file_to_circuit(file).unwrap();
+
+    let mut circuit_qoqo = Circuit::new();
+    circuit_qoqo += DefinitionBit::new("fold0_ham0_trotter2_twirl0_basisX_trex0_0".into(), 2, true);
+    circuit_qoqo += RotateXY::new(1, (PI / 2.0).into(), (-1.055552498497585).into());
+    circuit_qoqo += RotateXY::new(4, (PI / 10.0).into(), 0.into());
+    circuit_qoqo += ControlledPauliZ::new(4, 1);
+    circuit_qoqo += MeasureQubit::new(4, "fold0_ham0_trotter2_twirl0_basisX_trex0_0".into(), 0);
+    circuit_qoqo += MeasureQubit::new(1, "fold0_ham0_trotter2_twirl0_basisX_trex0_0".into(), 1);
     assert_eq!(circuit_from_file, circuit_qoqo);
 }
